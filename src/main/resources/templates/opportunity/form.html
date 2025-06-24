@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="uk"
+      th:replace="layout :: layout (~{::title}, ~{::body})">
+<head>
+    <title>Форма угоди</title>
+</head>
+<body>
+<div th:fragment="content">
+    <h2 th:text="${editId != null} ? 'Редагувати угоду' : 'Нова угода'" class="mb-3"></h2>
+
+    <form th:action="@{/opportunities}" method="post" th:object="${opportunityForm}">
+        <input type="hidden" name="editId" th:value="${editId}"/>
+
+        <div class="mb-3">
+            <label class="form-label">Назва</label>
+            <input type="text" th:field="*{name}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Ймовірність (%)</label>
+            <input type="number" th:field="*{probability}" class="form-control" min="0" max="100" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Очікувана сума</label>
+            <input type="number" step="0.01" th:field="*{expectedValue}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Стадія</label>
+            <input type="text" th:field="*{stage}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Лід</label>
+            <select th:field="*{leadId}" class="form-select" required>
+                <option th:value="">-- Оберіть --</option>
+                <option th:each="lead : ${leads}" th:value="${lead.id}" th:text="${lead.contactName} + ' / ' + ${lead.companyName}">Лід</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Зберегти</button>
+        <a th:href="@{/opportunities}" class="btn btn-secondary ms-2">Скасувати</a>
+    </form>
+</div>
+</body>
+</html>
