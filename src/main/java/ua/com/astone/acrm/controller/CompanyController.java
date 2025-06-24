@@ -1,4 +1,4 @@
-package ua.com.astone.acrm.controller.view;
+package ua.com.astone.acrm.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

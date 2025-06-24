@@ -2,11 +2,13 @@ package ua.com.astone.acrm.controller.view;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ua.com.astone.acrm.dto.company.*;
+import ua.com.astone.acrm.dto.company.CompanyPageRequest;
+import ua.com.astone.acrm.dto.company.CompanyRequest;
 import ua.com.astone.acrm.service.CompanyService;
 
 @Controller
@@ -15,6 +17,7 @@ import ua.com.astone.acrm.service.CompanyService;
 public class CompanyViewController {
 
     private final CompanyService companyService;
+    private static final String VIEW_FORM = "company/form";
 
     @GetMapping
     public String listCompanies(@RequestParam(required = false) String search,
@@ -24,12 +27,12 @@ public class CompanyViewController {
                                 @RequestParam(defaultValue = "ASC") String direction,
                                 Model model) {
 
-        var request = CompanyPageRequest.builder()
+        CompanyPageRequest request = CompanyPageRequest.builder()
                 .search(search)
                 .page(page)
                 .size(size)
                 .sort(sort)
-                .direction(org.springframework.data.domain.Sort.Direction.fromString(direction))
+                .direction(Sort.Direction.fromString(direction))
                 .build();
 
         var companies = companyService.findAllPaged(request);
@@ -42,7 +45,7 @@ public class CompanyViewController {
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("companyForm", new CompanyRequest());
-        return "company/form";
+        return VIEW_FORM;
     }
 
     @GetMapping("/{id}/edit")
@@ -59,7 +62,7 @@ public class CompanyViewController {
 
         model.addAttribute("companyForm", form);
         model.addAttribute("editId", id);
-        return "company/form";
+        return VIEW_FORM;
     }
 
     @PostMapping
@@ -69,7 +72,7 @@ public class CompanyViewController {
                               Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("editId", editId);
-            return "company/form";
+            return VIEW_FORM;
         }
 
         if (editId != null) {
@@ -86,5 +89,4 @@ public class CompanyViewController {
         companyService.delete(id);
         return "redirect:/companies";
     }
-
 }

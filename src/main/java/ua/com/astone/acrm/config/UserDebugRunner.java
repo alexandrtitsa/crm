@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-import ua.com.astone.acrm.model.User;
 import ua.com.astone.acrm.repository.UserRepository;
 
 @Component
