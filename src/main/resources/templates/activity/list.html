@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="uk"
+      th:replace="layout :: layout (~{::title}, ~{::body})">
+<head>
+    <title>Активності</title>
+</head>
+<body>
+<div th:fragment="content">
+    <h2 class="mb-3">Список активностей</h2>
+
+    <div class="mb-3 text-end">
+        <a class="btn btn-success" th:href="@{/activities/new}">+ Нова активність</a>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Тип</th>
+            <th>Дата і час</th>
+            <th>Опис</th>
+            <th>Контакт</th>
+            <th>Угода</th>
+            <th>Дії</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="a : ${activities}">
+            <td th:text="${a.type}">Meeting</td>
+            <td th:text="${#temporals.format(a.dateTime, 'yyyy-MM-dd HH:mm')}">2025-06-20 12:00</td>
+            <td th:text="${a.description}">Опис</td>
+            <td th:text="${a.contactName}">Іван Іванов</td>
+            <td th:text="${a.opportunityName}">Угода 1</td>
+            <td class="d-flex gap-2">
+                <a th:href="@{'/activities/' + ${a.id} + '/edit'}" class="btn btn-sm btn-outline-primary">Редагувати</a>
+                <form th:action="@{'/activities/' + ${a.id} + '/delete'}" method="post"
+                      onsubmit="return confirm('Видалити активність?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Видалити</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
