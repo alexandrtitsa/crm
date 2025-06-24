@@ -1,4 +1,4 @@
-package ua.com.astone.acrm.controller.view;
+package ua.com.astone.acrm.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
