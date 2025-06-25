@@ -8,11 +8,11 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() {
-        return "home"; // створимо пізніше
+        return "home"; // Відображає home.html із фрагментом layout
     }
 
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return "login"; // Відображає login.html
     }
 }

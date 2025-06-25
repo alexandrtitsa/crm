@@ -1,45 +1,47 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="uk"
-      th:replace="layout :: layout (~{::title}, ~{::body})">
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Форма компанії</title>
+    <meta charset="UTF-8">
+    <title th:text="${editId != null} ? 'Редагувати компанію' : 'Нова компанія'">Компанія</title>
 </head>
-<body>
-<div th:fragment="content">
-    <h2 th:text="${editId != null} ? 'Редагувати компанію' : 'Створити компанію'" class="mb-3"></h2>
+<body th:replace="~{layout :: layout(~{::title}, ~{::section})}">
 
-    <form th:action="@{/companies}" method="post" th:object="${companyForm}">
-        <input type="hidden" name="editId" th:value="${editId}" />
+<section>
+    <h1 th:text="${editId != null} ? 'Редагувати компанію' : 'Нова компанія'"></h1>
 
-        <div class="mb-3">
-            <label class="form-label">Назва *</label>
-            <input type="text" th:field="*{name}" class="form-control" required>
-            <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+    <form th:action="${editId != null} ? @{/companies/{id}(id=${editId})} : @{/companies}"
+          th:object="${companyForm}" method="post">
+        <div>
+            <label for="name">Назва:</label>
+            <input type="text" id="name" th:field="*{name}" required/>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Галузь</label>
-            <input type="text" th:field="*{industry}" class="form-control">
+        <div>
+            <label for="industry">Галузь:</label>
+            <input type="text" id="industry" th:field="*{industry}"/>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Адреса</label>
-            <input type="text" th:field="*{address}" class="form-control">
+        <div>
+            <label for="website">Веб-сайт:</label>
+            <input type="url" id="website" th:field="*{website}"/>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Сайт</label>
-            <input type="url" th:field="*{website}" class="form-control">
+        <div>
+            <label for="address">Адреса:</label>
+            <input type="text" id="address" th:field="*{address}"/>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Опис</label>
-            <textarea th:field="*{description}" class="form-control" rows="4"></textarea>
+        <div>
+            <label for="description">Опис:</label>
+            <textarea id="description" th:field="*{description}"></textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary">Зберегти</button>
-        <a th:href="@{/companies}" class="btn btn-secondary ms-2">Скасувати</a>
+        <div>
+            <button type="submit">Зберегти</button>
+            <a th:href="@{/companies}">Скасувати</a>
+        </div>
     </form>
-</div>
+</section>
+
 </body>
 </html>

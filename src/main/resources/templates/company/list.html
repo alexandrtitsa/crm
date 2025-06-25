@@ -1,85 +1,52 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="uk"
-      th:replace="layout :: layout (~{::title}, ~{::body})">
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Компанії</title>
+    <meta charset="UTF-8">
+    <title>Список компаній</title>
 </head>
-<body>
-<div th:fragment="content">
-    <h2 class="mb-3">Список компаній</h2>
+<body th:replace="~{layout :: layout(~{::title}, ~{::section})}">
 
-    <form method="get" th:action="@{/companies}" class="mb-3 row g-2">
-        <div class="col-auto">
-            <input type="text" name="search" class="form-control" placeholder="Пошук..."
-                   th:value="${request.search}">
-        </div>
-        <div class="col-auto">
-            <button type="submit" class="btn btn-primary">Пошук</button>
-        </div>
+<section>
+    <h1>Компанії</h1>
+
+    <form method="get" class="mb-3">
+        <input type="text" name="search" th:value="${request.search}" placeholder="Пошук..." />
+        <button type="submit">Пошук</button>
+        <a th:href="@{/companies/new}">+ Додати</a>
     </form>
 
-    <div class="mb-3 text-end">
-        <a class="btn btn-success" th:href="@{/companies/new}">+ Нова компанія</a>
-    </div>
-
-    <table class="table table-bordered table-hover">
+    <table>
         <thead>
         <tr>
-            <th>
-                <a th:href="@{/companies(sort='name', direction=${request.direction.name() == 'ASC' ? 'DESC' : 'ASC'})}">
-                    Назва
-                </a>
-            </th>
-            <th>Галузь</th>
-            <th>Сайт</th>
-            <th>Адреса</th>
+            <th><a th:href="@{/companies(sort='name', direction=${request.direction == 'ASC' ? 'DESC' : 'ASC'}, search=${request.search})}">Назва</a></th>
+            <th>Індустрія</th>
+            <th>Опис</th>
             <th>Дії</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="company : ${companies.content}">
             <td th:text="${company.name}">Назва</td>
-            <td th:text="${company.industry}">Галузь</td>
+            <td th:text="${company.industry}">Індустрія</td>
+            <td th:text="${company.description}">Опис</td>
             <td>
-                <a th:href="${company.website}" th:text="${company.website}" target="_blank">Сайт</a>
-            </td>
-            <td th:text="${company.address}">Адреса</td>
-            <td class="d-flex gap-2">
-                <a th:href="@{'/companies/' + ${company.id} + '/edit'}"
-                   class="btn btn-sm btn-outline-primary">Редагувати</a>
-
-                <form th:action="@{'/companies/' + ${company.id} + '/delete'}" method="post"
-                      onsubmit="return confirm('Ви впевнені, що хочете видалити цю компанію?');">
-                    <button type="submit" class="btn btn-sm btn-outline-danger">Видалити</button>
+                <a th:href="@{/companies/{id}/edit(id=${company.id})}">Редагувати</a>
+                <form th:action="@{/companies/{id}/delete(id=${company.id})}" method="post" th:object="${company}" style="display:inline;">
+                    <button type="submit">Видалити</button>
                 </form>
             </td>
         </tr>
         </tbody>
     </table>
 
-    <nav th:if="${companies.totalPages > 1}">
-        <ul class="pagination">
-            <li class="page-item" th:classappend="${companies.first} ? 'disabled'">
-                <a class="page-link"
-                   th:href="@{/companies(page=${companies.number - 1}, size=${companies.size}, search=${request.search})}">
-                    Попередня
-                </a>
-            </li>
-            <li class="page-item"
-                th:each="i : ${#numbers.sequence(0, companies.totalPages - 1)}"
-                th:classappend="${companies.number == i} ? 'active'">
-                <a class="page-link"
-                   th:href="@{/companies(page=${i}, size=${companies.size}, search=${request.search})}"
-                   th:text="${i + 1}">1</a>
-            </li>
-            <li class="page-item" th:classappend="${companies.last} ? 'disabled'">
-                <a class="page-link"
-                   th:href="@{/companies(page=${companies.number + 1}, size=${companies.size}, search=${request.search})}">
-                    Наступна
-                </a>
-            </li>
-        </ul>
-    </nav>
-</div>
+    <div>
+        <span th:text="'Сторінка ' + ${companies.number + 1} + ' з ' + ${companies.totalPages}"></span>
+        <div>
+            <a th:href="@{/companies(page=${companies.number - 1}, search=${request.search})}" th:if="${companies.hasPrevious()}">← Попередня</a>
+            <a th:href="@{/companies(page=${companies.number + 1}, search=${request.search})}" th:if="${companies.hasNext()}">Наступна →</a>
+        </div>
+    </div>
+</section>
+
 </body>
 </html>
