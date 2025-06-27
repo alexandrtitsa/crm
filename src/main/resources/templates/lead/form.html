@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout(~{::title}, ~{::section})">
+<head>
+    <meta charset="UTF-8">
+    <title>Форма ліда</title>
+</head>
+<body>
+<section>
+    <div class="container mt-4">
+        <h2 th:text="${lead.id != null} ? 'Редагування ліда' : 'Новий лід'"></h2>
+        <form th:action="@{${lead.id != null} ? '/leads/' + ${lead.id} : '/leads'}" method="post" th:object="${lead}">
+            <div class="mb-3">
+                <label class="form-label">Джерело</label>
+                <input type="text" class="form-control" th:field="*{source}" required/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Статус</label>
+                <input type="text" class="form-control" th:field="*{status}" required/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Контакт</label>
+                <select class="form-select" th:field="*{contactId}">
+                    <option th:each="c : ${contacts}" th:value="${c.id}" th:text="${c.firstName + ' ' + c.lastName}"></option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Компанія</label>
+                <select class="form-select" th:field="*{companyId}">
+                    <option th:each="c : ${companies}" th:value="${c.id}" th:text="${c.name}"></option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Зберегти</button>
+            <a class="btn btn-secondary" th:href="@{/leads}">Скасувати</a>
+        </form>
+    </div>
+</section>
+</body>
+</html>
