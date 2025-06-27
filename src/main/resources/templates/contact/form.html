@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::section})}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Контакти</title>
+</head>
+
+<section>
+    <div class="container mt-4">
+        <h2 th:text="${contact.id != null} ? 'Редагування контакту' : 'Новий контакт'"></h2>
+
+        <form th:action="@{/contacts}" th:object="${contact}" method="post">
+
+            <input type="hidden" th:if="${contact.id != null}" th:field="*{id}" />
+
+            <div class="mb-3">
+                <label for="firstName" class="form-label">Ім’я</label>
+                <input type="text" class="form-control" id="firstName" th:field="*{firstName}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="lastName" class="form-label">Прізвище</label>
+                <input type="text" class="form-control" id="lastName" th:field="*{lastName}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" th:field="*{email}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="phone" class="form-label">Телефон</label>
+                <input type="text" class="form-control" id="phone" th:field="*{phone}">
+            </div>
+
+            <div class="mb-3">
+                <label for="position" class="form-label">Посада</label>
+                <input type="text" class="form-control" id="position" th:field="*{position}">
+            </div>
+
+            <div class="mb-3">
+                <label for="company" class="form-label">Компанія</label>
+                <select class="form-select" id="company" th:field="*{company.id}" required>
+                    <option value="" disabled selected>Оберіть компанію</option>
+                    <option th:each="company : ${companies}"
+                            th:value="${company.id}"
+                            th:text="${company.name}"
+                            th:selected="${contact.company != null and company.id == contact.company.id}">
+                    </option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Зберегти</button>
+            <a th:href="@{/contacts}" class="btn btn-secondary">Скасувати</a>
+        </form>
+    </div>
+</section>
+</html>

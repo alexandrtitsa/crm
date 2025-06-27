@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Контакти</title>
+</head>
+<body th:replace="~{layout :: layout(~{::title}, ~{::section})}">
+
+<section>
+    <div class="container mt-4">
+        <h2>Список контактів</h2>
+
+        <a class="btn btn-success mb-3" th:href="@{/contacts/add}">Додати контакт</a>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Ім’я</th>
+                <th>Прізвище</th>
+                <th>Email</th>
+                <th>Телефон</th>
+                <th>Посада</th>
+                <th>Компанія</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="contact : ${contacts}">
+                <td th:text="${contact.firstName}">Ім’я</td>
+                <td th:text="${contact.lastName}">Прізвище</td>
+                <td th:text="${contact.email}">Email</td>
+                <td th:text="${contact.phone}">Телефон</td>
+                <td th:text="${contact.position}">Посада</td>
+                <td th:text="${contact.companyName}">Компанія</td>
+                <td>
+                    <a th:href="@{'/contacts/edit/' + ${contact.id}}" class="btn btn-sm btn-primary">Редагувати</a>
+                    <form th:action="@{'/contacts/' + ${contact.id} + '/delete'}" method="post"
+                          th:onsubmit="return confirm('Ви впевнені?')" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-danger">Видалити</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+</body>
+</html>
