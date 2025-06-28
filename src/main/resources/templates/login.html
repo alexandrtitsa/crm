@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>CRM Login</title>
-    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM - Вхід</title>
+    <link rel="stylesheet" href="/css/login.css">
 </head>
 <body>
-<div class="container">
-    <div class="speech-bubble">Welcome to <span class="highlight">CRM</span></div>
-    <form class="login-form" th:action="@{/login}" method="post">
-        <input type="text" name="username" placeholder="Username" required autofocus>
-        <input type="password" name="password" placeholder="Password" required>
-        <button type="submit">Login</button>
+<div class="login-container">
+    <form class="login-form" action="/login" method="post">
+        <h1>Вхід у CRM</h1>
+        <input type="text" name="username" placeholder="Ім'я користувача" required>
+        <input type="password" name="password" placeholder="Пароль" required>
+        <button type="submit">Увійти</button>
     </form>
 </div>
 </body>

@@ -1,78 +1,80 @@
-body {
-    background-color: #fcd9a9;
-    font-family: 'Segoe UI', sans-serif;
+body, html {
+    height: 100%;
     margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    overflow: hidden;
+}
+
+body {
+    background: url('/images/crm-login-bg.png') no-repeat center center fixed;
+    background-size: cover;
+    animation: fadeInBackground 2s ease-in-out;
+}
+
+@keyframes fadeInBackground {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.login-container {
     display: flex;
-    height: 100vh;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    height: 100%;
+    backdrop-filter: blur(3px);
+    background-color: rgba(255, 255, 255, 0.2);
+    animation: containerFadeIn 2s ease-in-out;
 }
 
-.container {
-    text-align: center;
-    animation: slideIn 1s ease-out forwards;
-    opacity: 0;
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-.speech-bubble {
-    background: #f04e23;
-    color: white;
-    display: inline-block;
-    padding: 1rem 2rem;
-    border-radius: 1rem;
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
-    box-shadow: 3px 3px 0 #000;
-}
-
-.speech-bubble .highlight {
-    background: #fcd93a;
-    color: black;
-    padding: 0.2rem 0.5rem;
-    margin-left: 0.5rem;
-    border-radius: 0.4rem;
-    box-shadow: 2px 2px 0 #000;
+@keyframes containerFadeIn {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
 .login-form {
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    max-width: 300px;
-    margin: 0 auto;
+    align-items: center;
+    animation: formScaleUp 1.5s ease-in-out;
+}
+
+@keyframes formScaleUp {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.login-form h1 {
+    margin-bottom: 20px;
+    color: #333;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
 }
 
 .login-form input {
-    padding: 0.8rem;
-    border: 2px solid #000;
-    border-radius: 10px;
-    font-size: 1rem;
-    outline: none;
+    width: 300px;
+    padding: 12px 20px;
+    margin: 10px 0;
+    border-radius: 15px;
+    border: 1px solid #ccc;
+    font-size: 16px;
 }
 
 .login-form button {
-    padding: 0.8rem;
-    background-color: #4b9cd3;
+    margin-top: 20px;
+    padding: 12px 40px;
+    background-color: #4CAF50;
     color: white;
     border: none;
-    font-size: 1rem;
-    border-radius: 10px;
+    border-radius: 15px;
     cursor: pointer;
-    box-shadow: 2px 2px 0 #000;
+    font-size: 18px;
     transition: background-color 0.3s ease;
 }
 
 .login-form button:hover {
-    background-color: #357cbf;
+    background-color: #45a049;
 }
