@@ -1,19 +1,15 @@
 <!DOCTYPE html>
-<html lang="uk" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout :: layout(~{::title}, ~{::section})}">
-
+<html lang="uk" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::section})}">
 <head>
     <meta charset="UTF-8">
-    <title>Контакти</title>
+    <title>Контакт</title>
 </head>
-
 <section>
     <div class="container mt-4">
-        <h2 th:text="${contact.id != null} ? 'Редагування контакту' : 'Новий контакт'"></h2>
+        <h2 th:text="${editId != null} ? 'Редагування контакту' : 'Новий контакт'"></h2>
 
         <form th:action="@{/contacts}" th:object="${contact}" method="post">
-
-            <input type="hidden" th:if="${contact.id != null}" th:field="*{id}" />
+            <input type="hidden" th:if="${editId != null}" name="editId" th:value="${editId}" />
 
             <div class="mb-3">
                 <label for="firstName" class="form-label">Ім’я</label>
@@ -42,13 +38,12 @@
 
             <div class="mb-3">
                 <label for="company" class="form-label">Компанія</label>
-                <select class="form-select" id="company" th:field="*{company.id}" required>
-                    <option value="" disabled selected>Оберіть компанію</option>
+                <select class="form-select" id="company" th:field="*{companyId}" required>
+                    <option value="" disabled>Оберіть компанію</option>
                     <option th:each="company : ${companies}"
                             th:value="${company.id}"
                             th:text="${company.name}"
-                            th:selected="${contact.company != null and company.id == contact.company.id}">
-                    </option>
+                            th:selected="${contact.companyId} == ${company.id}"></option>
                 </select>
             </div>
 

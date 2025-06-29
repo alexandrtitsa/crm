@@ -5,33 +5,31 @@
     <title>Можливості</title>
 </head>
 <body>
-<section>
-    <h1>Список можливостей</h1>
-    <a th:href="@{/opportunities/add}" class="btn btn-primary mb-3">Додати можливість</a>
-    <table class="table table-bordered">
+<section class="activities-section">
+    <h1>Можливості</h1>
+    <a class="btn btn-primary mb-3" th:href="@{/opportunities/add}">Додати</a>
+    <table class="table table-striped table-bordered align-middle">
         <thead>
         <tr>
-            <th>ID</th>
             <th>Назва</th>
-            <th>Ймовірність</th>
+            <th>Ймовірність (%)</th>
             <th>Очікувана вартість</th>
             <th>Стадія</th>
             <th>Лід</th>
-            <th></th>
+            <th>Дії</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="op : ${opportunities}">
-            <td th:text="${op.id}">1</td>
-            <td th:text="${op.name}">Negotiation</td>
-            <td th:text="${op.probability} + '%'">80%</td>
-            <td th:text="${op.expectedValue}">10000</td>
-            <td th:text="${op.stage}">Proposal</td>
-            <td th:text="${op.leadId}">12</td>
+            <td th:text="${op.name}"></td>
+            <td th:text="${op.probability}"></td>
+            <td th:text="${op.expectedValue}"></td>
+            <td th:text="${op.stage}"></td>
+            <td th:text="${op.leadId}"></td>
             <td>
-                <a th:href="@{/opportunities/{id}/edit(id=${op.id})}" class="btn btn-sm btn-secondary">Редагувати</a>
-                <form th:action="@{/opportunities/{id}/delete(id=${op.id})}" method="post" style="display:inline">
-                    <button type="submit" class="btn btn-sm btn-danger">Видалити</button>
+                <a th:href="@{'/opportunities/' + ${op.id} + '/edit'}" class="btn btn-sm btn-warning">Редагувати</a>
+                <form th:action="@{'/opportunities/' + ${op.id} + '/delete'}" method="post" style="display:inline;">
+                    <button class="btn btn-sm btn-danger">Видалити</button>
                 </form>
             </td>
         </tr>

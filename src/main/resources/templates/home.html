@@ -1,15 +1,17 @@
 <!DOCTYPE html>
-<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::section})}">
 <head>
     <meta charset="UTF-8">
     <title>Головна</title>
 </head>
-<body th:replace="~{layout :: layout(~{::title}, ~{::section})}">
-
-<section>
-    <h1>Вітаємо в ACRM</h1>
-    <p>Це головна сторінка системи керування відносинами з клієнтами.</p>
+<body>
+<section class="activities-section">
+    <div class="text-center mt-5">
+        <h1 class="display-4">Ласкаво просимо в ACrm!</h1>
+        <p class="lead">Ваш надійний CRM для управління угодами, контактами, лідами, можливостями та активностями.</p>
+        <hr>
+        <p class="mt-4">Використовуйте верхнє меню для переходу між розділами.</p>
+    </div>
 </section>
-
 </body>
 </html>
