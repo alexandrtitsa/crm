@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::section})}">
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${opportunity.id != null} ? 'Редагувати' : 'Додати'">Можливість</title>
+    <title th:text="${opportunity.id != null} ? 'Редагувати' : 'Додати'">Форма можливості</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body th:replace="~{layout :: layout(~{::title}, ~{::section})}">
 <section>
     <h1 th:text="${opportunity.id != null} ? 'Редагувати можливість' : 'Нова можливість'"></h1>
     <form th:action="${opportunity.id != null} ? @{'/opportunities/' + ${opportunity.id}} : @{/opportunities}" th:object="${opportunity}" method="post">

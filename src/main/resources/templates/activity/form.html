@@ -1,40 +1,51 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::section})}">
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${activity.id != null} ? 'Редагувати' : 'Додати'">Активність</title>
+    <title>Форма активності</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body th:replace="~{layout :: layout(~{::title}, ~{::section})}">
 <section>
-    <h1 th:text="${activity.id != null} ? 'Редагувати активність' : 'Нова активність'"></h1>
-    <form th:action="${activity.id != null} ? @{'/activities/' + ${activity.id}} : @{/activities}" th:object="${activity}" method="post">
-        <div class="form-group">
-            <label for="type">Тип</label>
-            <input type="text" th:field="*{type}" class="form-control"/>
-        </div>
-        <div class="form-group">
-            <label for="dateTime">Час</label>
-            <input type="datetime-local" th:field="*{dateTime}" class="form-control"/>
-        </div>
-        <div class="form-group">
-            <label for="description">Опис</label>
-            <textarea th:field="*{description}" class="form-control"></textarea>
-        </div>
-        <div class="form-group">
-            <label for="contactId">Контакт</label>
-            <select th:field="*{contactId}" class="form-control">
-                <option th:each="c : ${contacts}" th:value="${c.id}" th:text="${c.id}"></option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="opportunityId">Можливість</label>
-            <select th:field="*{opportunityId}" class="form-control">
-                <option th:each="o : ${opportunities}" th:value="${o.id}" th:text="${o.id}"></option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary mt-3">Зберегти</button>
-        <a class="btn btn-secondary" th:href="@{/activities}">Скасувати</a>
-    </form>
+    <div class="container mt-4">
+        <h2 th:text="${activity.id != null} ? 'Редагування активності' : 'Нова активність'"></h2>
+        <form th:action="${activity.id != null} ? @{'/activities/' + ${activity.id}} : @{/activities}" th:object="${activity}" method="post">
+            <div class="mb-3">
+                <label for="type" class="form-label">Тип</label>
+                <input type="text" class="form-control" id="type" th:field="*{type}" required>
+            </div>
+            <div class="mb-3">
+                <label for="dateTime" class="form-label">Час</label>
+                <input type="datetime-local" class="form-control" id="dateTime" th:field="*{dateTime}" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Опис</label>
+                <textarea class="form-control" id="description" th:field="*{description}"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="contactId" class="form-label">Контакт</label>
+                <select class="form-select" id="contactId" th:field="*{contactId}" required>
+                    <option value="" disabled>Оберіть контакт</option>
+                    <option th:each="c : ${contacts}"
+                            th:value="${c.id}"
+                            th:text="${c.firstName + ' ' + c.lastName}"
+                            th:selected="${activity.contactId} == ${c.id}"></option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="opportunityId" class="form-label">Можливість</label>
+                <select class="form-select" id="opportunityId" th:field="*{opportunityId}">
+                    <option value="" disabled>Оберіть можливість</option>
+                    <option th:each="o : ${opportunities}"
+                            th:value="${o.id}"
+                            th:text="${o.name}"
+                            th:selected="${activity.opportunityId} == ${o.id}"></option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Зберегти</button>
+            <a th:href="@{/activities}" class="btn btn-secondary">Скасувати</a>
+        </form>
+    </div>
 </section>
 </body>
 </html>

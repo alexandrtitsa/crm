@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="uk" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::section})}">
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Контакт</title>
+    <title>Форма контакта</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
 </head>
+<body th:replace="~{layout :: layout(~{::title}, ~{::section})}">
 <section>
     <div class="container mt-4">
         <h2 th:text="${editId != null} ? 'Редагування контакту' : 'Новий контакт'"></h2>
-
         <form th:action="@{/contacts}" th:object="${contact}" method="post">
             <input type="hidden" th:if="${editId != null}" name="editId" th:value="${editId}" />
 
@@ -52,4 +53,5 @@
         </form>
     </div>
 </section>
+</body>
 </html>

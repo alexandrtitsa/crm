@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout(~{::title}, ~{::section})">
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Форма ліда</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body th:replace="~{layout :: layout(~{::title}, ~{::section})}">
 <section>
     <div class="container mt-4">
         <h2 th:text="${lead.id != null} ? 'Редагування ліда' : 'Новий лід'"></h2>
