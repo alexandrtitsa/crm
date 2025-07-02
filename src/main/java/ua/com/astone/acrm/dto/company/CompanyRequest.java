@@ -9,8 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class CompanyRequest {
-
-    @NotBlank
+    @NotBlank(message = "Назва компанії обов'язкова")
     private String name;
 
     private String industry;

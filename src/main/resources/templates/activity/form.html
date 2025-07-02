@@ -2,44 +2,44 @@
 <html lang="uk" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Форма активності</title>
+    <title th:text="${editId != null} ? 'Редагувати активність' : 'Нова активність'">Форма активності</title>
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
 </head>
 <body th:replace="~{layout :: layout(~{::title}, ~{::section})}">
 <section>
     <div class="container mt-4">
-        <h2 th:text="${activity.id != null} ? 'Редагування активності' : 'Нова активність'"></h2>
-        <form th:action="${activity.id != null} ? @{'/activities/' + ${activity.id}} : @{/activities}" th:object="${activity}" method="post">
+        <h1 th:text="${editId != null} ? 'Редагувати активність' : 'Нова активність'"></h1>
+        <form th:action="${editId != null} ? @{'/activities/' + ${editId} + '/edit'} : @{/activities}"
+              th:object="${activityForm}" method="post">
+
             <div class="mb-3">
-                <label for="type" class="form-label">Тип</label>
-                <input type="text" class="form-control" id="type" th:field="*{type}" required>
+                <label class="form-label">Тип</label>
+                <input type="text" th:field="*{type}" class="form-control" required/>
             </div>
             <div class="mb-3">
-                <label for="dateTime" class="form-label">Час</label>
-                <input type="datetime-local" class="form-control" id="dateTime" th:field="*{dateTime}" required>
+                <label class="form-label">Дата та час</label>
+                <input type="datetime-local" th:field="*{dateTime}" class="form-control"/>
             </div>
             <div class="mb-3">
-                <label for="description" class="form-label">Опис</label>
-                <textarea class="form-control" id="description" th:field="*{description}"></textarea>
+                <label class="form-label">Опис</label>
+                <textarea th:field="*{description}" class="form-control"></textarea>
             </div>
             <div class="mb-3">
-                <label for="contactId" class="form-label">Контакт</label>
-                <select class="form-select" id="contactId" th:field="*{contactId}" required>
-                    <option value="" disabled>Оберіть контакт</option>
+                <label class="form-label">Контакт</label>
+                <select th:field="*{contactId}" class="form-select">
+                    <option value="" disabled th:selected="*{contactId} == null">Оберіть контакт</option>
                     <option th:each="c : ${contacts}"
                             th:value="${c.id}"
-                            th:text="${c.firstName + ' ' + c.lastName}"
-                            th:selected="${activity.contactId} == ${c.id}"></option>
+                            th:text="${c.firstName + ' ' + c.lastName}"></option>
                 </select>
             </div>
             <div class="mb-3">
-                <label for="opportunityId" class="form-label">Можливість</label>
-                <select class="form-select" id="opportunityId" th:field="*{opportunityId}">
-                    <option value="" disabled>Оберіть можливість</option>
+                <label class="form-label">Можливість</label>
+                <select th:field="*{opportunityId}" class="form-select">
+                    <option value="" disabled th:selected="*{opportunityId} == null">Оберіть можливість</option>
                     <option th:each="o : ${opportunities}"
                             th:value="${o.id}"
-                            th:text="${o.name}"
-                            th:selected="${activity.opportunityId} == ${o.id}"></option>
+                            th:text="${o.name}"></option>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Зберегти</button>

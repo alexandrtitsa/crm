@@ -2,38 +2,47 @@
 <html lang="uk" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${opportunity.id != null} ? 'Редагувати' : 'Додати'">Форма можливості</title>
+    <title th:text="${editId != null} ? 'Редагувати можливість' : 'Нова можливість'">Форма можливості</title>
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
 </head>
 <body th:replace="~{layout :: layout(~{::title}, ~{::section})}">
 <section>
-    <h1 th:text="${opportunity.id != null} ? 'Редагувати можливість' : 'Нова можливість'"></h1>
-    <form th:action="${opportunity.id != null} ? @{'/opportunities/' + ${opportunity.id}} : @{/opportunities}" th:object="${opportunity}" method="post">
-        <div class="form-group">
-            <label for="name">Назва</label>
-            <input type="text" th:field="*{name}" class="form-control"/>
-        </div>
-        <div class="form-group">
-            <label for="probability">Ймовірність (%)</label>
-            <input type="number" th:field="*{probability}" class="form-control"/>
-        </div>
-        <div class="form-group">
-            <label for="expectedValue">Очікувана вартість</label>
-            <input type="number" step="0.01" th:field="*{expectedValue}" class="form-control"/>
-        </div>
-        <div class="form-group">
-            <label for="stage">Стадія</label>
-            <input type="text" th:field="*{stage}" class="form-control"/>
-        </div>
-        <div class="form-group">
-            <label for="leadId">Лід</label>
-            <select th:field="*{leadId}" class="form-control">
-                <option th:each="lead : ${leads}" th:value="${lead.id}" th:text="${lead.id}"></option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary mt-3">Зберегти</button>
-        <a class="btn btn-secondary" th:href="@{/opportunities}">Скасувати</a>
-    </form>
+    <div class="container mt-4">
+        <h1 th:text="${editId != null} ? 'Редагувати можливість' : 'Нова можливість'"></h1>
+        <form th:action="${editId != null} ? @{'/opportunities/' + ${editId} + '/edit'} : @{/opportunities}"
+              th:object="${opportunityForm}" method="post">
+
+            <div class="mb-3">
+                <label class="form-label">Назва</label>
+                <input type="text" th:field="*{name}" class="form-control" required/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Ймовірність (%)</label>
+                <input type="number" th:field="*{probability}" class="form-control"/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Очікувана вартість</label>
+                <input type="number" step="0.01" th:field="*{expectedValue}" class="form-control"/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Стадія</label>
+                <input type="text" th:field="*{stage}" class="form-control"/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Лід</label>
+                <select th:field="*{leadId}" class="form-control" required>
+                    <option value="" disabled
+                            th:selected="*{leadId} == null">Оберіть лід</option>
+                    <option th:each="lead : ${leads}"
+                            th:value="${lead.id}"
+                            th:text="${lead.source + ' (' + lead.id + ')'}"></option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">Зберегти</button>
+            <a class="btn btn-secondary" th:href="@{/opportunities}">Скасувати</a>
+        </form>
+    </div>
 </section>
 </body>
 </html>

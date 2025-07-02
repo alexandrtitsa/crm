@@ -15,17 +15,21 @@ public class OpportunityMapper {
     private final LeadRepository leadRepository;
 
     public Opportunity toEntity(OpportunityRequest request) {
-        Lead lead = request.getLeadId() != null
-                ? leadRepository.findById(request.getLeadId()).orElse(null)
-                : null;
-
         return Opportunity.builder()
                 .name(request.getName())
                 .probability(request.getProbability())
                 .expectedValue(request.getExpectedValue())
                 .stage(request.getStage())
-                .lead(lead)
+                .lead(resolveLead(request.getLeadId()))
                 .build();
+    }
+
+    public void updateEntity(OpportunityRequest request, Opportunity opportunity) {
+        opportunity.setName(request.getName());
+        opportunity.setProbability(request.getProbability());
+        opportunity.setExpectedValue(request.getExpectedValue());
+        opportunity.setStage(request.getStage());
+        opportunity.setLead(resolveLead(request.getLeadId()));
     }
 
     public OpportunityResponse toResponse(Opportunity opportunity) {
@@ -39,17 +43,7 @@ public class OpportunityMapper {
                 .build();
     }
 
-    public void updateEntity(OpportunityRequest request, Opportunity opportunity) {
-        opportunity.setName(request.getName());
-        opportunity.setProbability(request.getProbability());
-        opportunity.setExpectedValue(request.getExpectedValue());
-        opportunity.setStage(request.getStage());
-
-        if (request.getLeadId() != null) {
-            Lead lead = leadRepository.findById(request.getLeadId()).orElse(null);
-            opportunity.setLead(lead);
-        } else {
-            opportunity.setLead(null);
-        }
+    private Lead resolveLead(Long id) {
+        return id != null ? leadRepository.findById(id).orElse(null) : null;
     }
 }

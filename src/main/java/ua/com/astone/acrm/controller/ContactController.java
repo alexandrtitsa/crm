@@ -21,11 +21,6 @@ public class ContactController {
         return contactService.findAll();
     }
 
-    @GetMapping("/paged")
-    public List<ContactResponse> findAllPaged(Pageable pageable) {
-        return contactService.findAll(pageable).getContent();
-    }
-
     @GetMapping("/{id}")
     public ContactResponse findById(@PathVariable Long id) {
         return contactService.findById(id);
@@ -43,6 +38,6 @@ public class ContactController {
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        contactService.deleteById(id);
+        contactService.delete(id);
     }
 }

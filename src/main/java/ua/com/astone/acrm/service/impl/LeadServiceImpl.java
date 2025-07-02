@@ -1,73 +1,71 @@
 package ua.com.astone.acrm.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.com.astone.acrm.dto.lead.LeadRequest;
-import ua.com.astone.acrm.dto.lead.LeadResponse;
-import ua.com.astone.acrm.exception.NotFoundException;
+import ua.com.astone.acrm.dto.lead.*;
 import ua.com.astone.acrm.model.Lead;
 import ua.com.astone.acrm.repository.LeadRepository;
-import ua.com.astone.acrm.util.LeadMapper;
 import ua.com.astone.acrm.service.LeadService;
+import ua.com.astone.acrm.util.LeadMapper;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class LeadServiceImpl implements LeadService {
 
     private final LeadRepository leadRepository;
     private final LeadMapper leadMapper;
 
     @Override
-    public Page<LeadResponse> findAll(Pageable pageable) {
-        return leadRepository.findAll(pageable)
-                .map(leadMapper::toResponse);
+    public LeadResponse findById(Long id) {
+        return leadRepository.findById(id)
+                .map(leadMapper::toResponse)
+                .orElseThrow(() -> new IllegalArgumentException("Lead not found"));
     }
 
     @Override
     public List<LeadResponse> findAll() {
-        return leadRepository.findAll()
-                .stream()
+        return leadRepository.findAll().stream()
                 .map(leadMapper::toResponse)
                 .toList();
     }
 
     @Override
-    public LeadResponse findById(Long id) {
-        return leadMapper.toResponse(findByIdOrThrow(id));
+    public Page<LeadResponse> findAllPaged(LeadPageRequest request) {
+        Pageable pageable = PageRequest.of(request.getPage(), request.getSize(), request.toSort());
+
+        Page<Lead> page;
+        if (request.getSearch() != null && !request.getSearch().isBlank()) {
+            String q = request.getSearch().toLowerCase();
+            // Приклад пошуку за source або status (додай інше якщо потрібно)
+            page = leadRepository.findBySourceIgnoreCaseContainingOrStatusIgnoreCaseContaining(q, q, pageable);
+        } else {
+            page = leadRepository.findAll(pageable);
+        }
+
+        return page.map(leadMapper::toResponse);
     }
 
     @Override
-    @Transactional
     public LeadResponse create(LeadRequest request) {
         Lead lead = leadMapper.toEntity(request);
         return leadMapper.toResponse(leadRepository.save(lead));
     }
 
     @Override
-    @Transactional
     public LeadResponse update(Long id, LeadRequest request) {
-        Lead existing = findByIdOrThrow(id);
-        leadMapper.updateEntity(request, existing);
-        return leadMapper.toResponse(leadRepository.save(existing));
+        Lead lead = leadRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Lead not found"));
+        leadMapper.updateEntity(request, lead);
+        return leadMapper.toResponse(leadRepository.save(lead));
     }
 
     @Override
-    @Transactional
-    public void deleteById(Long id) {
-        if (!leadRepository.existsById(id)) {
-            throw new NotFoundException("Lead", id);
-        }
+    public void delete(Long id) {
         leadRepository.deleteById(id);
-    }
-
-    private Lead findByIdOrThrow(Long id) {
-        return leadRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Lead", id));
     }
 }

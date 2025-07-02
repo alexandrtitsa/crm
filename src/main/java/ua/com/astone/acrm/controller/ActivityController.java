@@ -17,9 +17,7 @@ public class ActivityController {
     private final ActivityService service;
 
     @GetMapping
-    public List<ActivityResponse> findAll() {
-        return service.findAll();
-    }
+    public List<ActivityResponse> findAll() {return service.findAll();}
 
     @GetMapping("/{id}")
     public ActivityResponse findById(@PathVariable Long id) {
@@ -38,6 +36,6 @@ public class ActivityController {
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        service.deleteById(id);
+        service.delete(id);
     }
 }

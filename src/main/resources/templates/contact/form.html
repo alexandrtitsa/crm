@@ -2,50 +2,58 @@
 <html lang="uk" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Форма контакта</title>
+    <title th:text="${editId != null} ? 'Редагування контакту' : 'Новий контакт'">Форма контакта</title>
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
 </head>
 <body th:replace="~{layout :: layout(~{::title}, ~{::section})}">
 <section>
     <div class="container mt-4">
         <h2 th:text="${editId != null} ? 'Редагування контакту' : 'Новий контакт'"></h2>
-        <form th:action="@{/contacts}" th:object="${contact}" method="post">
-            <input type="hidden" th:if="${editId != null}" name="editId" th:value="${editId}" />
+        <form th:action="${editId != null} ? @{'/contacts/' + ${editId} + '/edit'} : @{/contacts}"
+              th:object="${contactForm}" method="post">
 
             <div class="mb-3">
                 <label for="firstName" class="form-label">Ім’я</label>
                 <input type="text" class="form-control" id="firstName" th:field="*{firstName}" required>
+                <div class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
             </div>
 
             <div class="mb-3">
                 <label for="lastName" class="form-label">Прізвище</label>
                 <input type="text" class="form-control" id="lastName" th:field="*{lastName}" required>
+                <div class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
             </div>
 
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input type="email" class="form-control" id="email" th:field="*{email}" required>
+                <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
             </div>
 
             <div class="mb-3">
                 <label for="phone" class="form-label">Телефон</label>
                 <input type="text" class="form-control" id="phone" th:field="*{phone}">
+                <div class="text-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
             </div>
 
             <div class="mb-3">
                 <label for="position" class="form-label">Посада</label>
                 <input type="text" class="form-control" id="position" th:field="*{position}">
+                <div class="text-danger" th:if="${#fields.hasErrors('position')}" th:errors="*{position}"></div>
             </div>
 
             <div class="mb-3">
                 <label for="company" class="form-label">Компанія</label>
                 <select class="form-select" id="company" th:field="*{companyId}" required>
-                    <option value="" disabled>Оберіть компанію</option>
+                    <option value="" disabled
+                            th:selected="*{companyId} == null">Оберіть компанію</option>
                     <option th:each="company : ${companies}"
                             th:value="${company.id}"
                             th:text="${company.name}"
-                            th:selected="${contact.companyId} == ${company.id}"></option>
+                            th:selected="*{companyId} == ${company.id}">
+                    </option>
                 </select>
+                <div class="text-danger" th:if="${#fields.hasErrors('companyId')}" th:errors="*{companyId}"></div>
             </div>
 
             <button type="submit" class="btn btn-primary">Зберегти</button>

@@ -11,22 +11,14 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 public class OpportunityRequest {
-
-
-    private Long id;
-
-    @NotBlank
+    @NotBlank(message = "Назва можливості обов'язкова")
     private String name;
 
-    @Min(0)
-    @Max(100)
     private Integer probability;
-
-    @DecimalMin("0.0")
     private BigDecimal expectedValue;
-
-    @NotBlank
     private String stage;
 
+    @NotNull(message = "Лід обов'язковий")
     private Long leadId;
 }
+

@@ -8,7 +8,7 @@
 <body th:replace="~{layout :: layout(~{::title}, ~{::section})}">
 <section>
     <h1 th:text="${editId != null} ? 'Редагувати компанію' : 'Нова компанія'"></h1>
-    <form th:action="${editId != null} ? @{/companies/{id}(id=${editId})} : @{/companies}"
+    <form th:action="${editId != null} ? @{/companies/{id}/edit(id=${editId})} : @{/companies}"
           th:object="${companyForm}" method="post">
         <div>
             <label for="name">Назва:</label>

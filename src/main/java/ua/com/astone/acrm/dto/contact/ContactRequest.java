@@ -10,14 +10,14 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ContactRequest {
-    @NotBlank
+    @NotBlank(message = "Ім'я обов'язкове")
     private String firstName;
-    private String lastName;
 
+    private String lastName;
     private String email;
     private String phone;
     private String position;
 
-    @NotNull
+    @NotNull(message = "Компанія обов'язкова")
     private Long companyId;
 }

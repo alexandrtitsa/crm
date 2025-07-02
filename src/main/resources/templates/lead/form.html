@@ -2,14 +2,15 @@
 <html lang="uk" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Форма ліда</title>
+    <title th:text="${editId != null} ? 'Редагування ліда' : 'Новий лід'">Форма ліда</title>
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
 </head>
 <body th:replace="~{layout :: layout(~{::title}, ~{::section})}">
 <section>
     <div class="container mt-4">
-        <h2 th:text="${lead.id != null} ? 'Редагування ліда' : 'Новий лід'"></h2>
-        <form th:action="@{${lead.id != null} ? '/leads/' + ${lead.id} : '/leads'}" method="post" th:object="${lead}">
+        <h2 th:text="${editId != null} ? 'Редагування ліда' : 'Новий лід'"></h2>
+        <form th:action="${editId != null} ? @{'/leads/' + ${editId} + '/edit'} : @{/leads}"
+              th:object="${leadForm}" method="post">
             <div class="mb-3">
                 <label class="form-label">Джерело</label>
                 <input type="text" class="form-control" th:field="*{source}" required/>
@@ -21,12 +22,14 @@
             <div class="mb-3">
                 <label class="form-label">Контакт</label>
                 <select class="form-select" th:field="*{contactId}">
+                    <option value="" disabled th:selected="*{contactId} == null">Оберіть контакт</option>
                     <option th:each="c : ${contacts}" th:value="${c.id}" th:text="${c.firstName + ' ' + c.lastName}"></option>
                 </select>
             </div>
             <div class="mb-3">
                 <label class="form-label">Компанія</label>
                 <select class="form-select" th:field="*{companyId}">
+                    <option value="" disabled th:selected="*{companyId} == null">Оберіть компанію</option>
                     <option th:each="c : ${companies}" th:value="${c.id}" th:text="${c.name}"></option>
                 </select>
             </div>

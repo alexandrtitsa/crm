@@ -11,14 +11,16 @@ import lombok.*;
 @Builder
 public class LeadRequest {
 
-    @NotBlank
     private Long id;
+
     private String source;
 
-    @NotBlank
+    @NotBlank(message = "Статус обов'язковий")
     private String status;
 
-    @NotNull
+    @NotNull(message = "Контакт обов'язковий")
     private Long contactId;
+
+    @NotNull(message = "Компанія обов'язкова")
     private Long companyId;
 }

@@ -11,18 +11,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ActivityRequest {
-
-    private Long id;
-
-    @NotBlank
+    @NotBlank(message = "Тип активності обов'язковий")
     private String type;
 
-    @NotNull
     private LocalDateTime dateTime;
 
     private String description;
 
+    @NotNull(message = "Контакт обов'язковий")
     private Long contactId;
 
+    @NotNull(message = "Можливість обов'язкова")
     private Long opportunityId;
 }

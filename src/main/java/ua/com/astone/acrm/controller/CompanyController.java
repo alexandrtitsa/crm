@@ -2,11 +2,9 @@ package ua.com.astone.acrm.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import ua.com.astone.acrm.dto.company.*;
+import ua.com.astone.acrm.dto.company.CompanyRequest;
+import ua.com.astone.acrm.dto.company.CompanyResponse;
 import ua.com.astone.acrm.service.CompanyService;
 
 import java.util.List;
@@ -16,51 +14,28 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CompanyController {
 
-    private final CompanyService companyService;
-
-    @PostMapping
-    public ResponseEntity<CompanyResponse> create(@RequestBody @Valid CompanyRequest request) {
-        return new ResponseEntity<>(companyService.create(request), HttpStatus.CREATED);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<CompanyResponse> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(companyService.findById(id));
-    }
+    private final CompanyService service;
 
     @GetMapping
-    public ResponseEntity<List<CompanyResponse>> getAll() {
-        return ResponseEntity.ok(companyService.findAll());
+    public List<CompanyResponse> findAll() { return service.findAll(); }
+
+    @GetMapping("/{id}")
+    public CompanyResponse findById(@PathVariable Long id) {
+        return service.findById(id);
     }
 
-    @GetMapping("/paged")
-    public ResponseEntity<Page<CompanyResponse>> getPaged(
-            @RequestParam(required = false) String search,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "name") String sort,
-            @RequestParam(defaultValue = "ASC") Sort.Direction direction) {
-
-        CompanyPageRequest request = CompanyPageRequest.builder()
-                .search(search)
-                .page(page)
-                .size(size)
-                .sort(sort)
-                .direction(direction)
-                .build();
-
-        return ResponseEntity.ok(companyService.findAllPaged(request));
+    @PostMapping
+    public CompanyResponse create(@Valid @RequestBody CompanyRequest request) {
+        return service.create(request);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CompanyResponse> update(@PathVariable Long id,
-                                                  @RequestBody @Valid CompanyRequest request) {
-        return ResponseEntity.ok(companyService.update(id, request));
+    public CompanyResponse update(@PathVariable Long id, @Valid @RequestBody CompanyRequest request) {
+        return service.update(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        companyService.delete(id);
-        return ResponseEntity.noContent().build();
+    public void delete(@PathVariable Long id) {
+        service.delete(id);
     }
 }

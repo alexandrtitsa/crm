@@ -1,13 +1,10 @@
 package ua.com.astone.acrm.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.com.astone.acrm.dto.activity.ActivityRequest;
-import ua.com.astone.acrm.dto.activity.ActivityResponse;
-import ua.com.astone.acrm.exception.NotFoundException;
+import ua.com.astone.acrm.dto.activity.*;
 import ua.com.astone.acrm.model.Activity;
 import ua.com.astone.acrm.repository.ActivityRepository;
 import ua.com.astone.acrm.service.ActivityService;
@@ -17,49 +14,57 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class ActivityServiceImpl implements ActivityService {
 
-    private final ActivityRepository repository;
-    private final ActivityMapper mapper;
-
-    @Override
-    public List<ActivityResponse> findAll() {
-        return repository.findAll().stream().map(mapper::toResponse).toList();
-    }
-
-    @Override
-    public Page<ActivityResponse> findAll(Pageable pageable) {
-        return repository.findAll(pageable).map(mapper::toResponse);
-    }
+    private final ActivityRepository activityRepository;
+    private final ActivityMapper activityMapper;
 
     @Override
     public ActivityResponse findById(Long id) {
-        return mapper.toResponse(findByIdOrThrow(id));
+        return activityRepository.findById(id)
+                .map(activityMapper::toResponse)
+                .orElseThrow(() -> new IllegalArgumentException("Activity not found"));
     }
 
     @Override
-    @Transactional
+    public List<ActivityResponse> findAll() {
+        return activityRepository.findAll().stream()
+                .map(activityMapper::toResponse)
+                .toList();
+    }
+
+    @Override
+    public Page<ActivityResponse> findAllPaged(ActivityPageRequest request) {
+        Pageable pageable = PageRequest.of(request.getPage(), request.getSize(), request.toSort());
+
+        Page<Activity> page;
+        if (request.getSearch() != null && !request.getSearch().isBlank()) {
+            String q = request.getSearch().toLowerCase();
+            page = activityRepository.findByTypeIgnoreCaseContainingOrDescriptionIgnoreCaseContaining(q, q, pageable);
+        } else {
+            page = activityRepository.findAll(pageable);
+        }
+
+        return page.map(activityMapper::toResponse);
+    }
+
+    @Override
     public ActivityResponse create(ActivityRequest request) {
-        return mapper.toResponse(repository.save(mapper.toEntity(request)));
+        Activity activity = activityMapper.toEntity(request);
+        return activityMapper.toResponse(activityRepository.save(activity));
     }
 
     @Override
-    @Transactional
     public ActivityResponse update(Long id, ActivityRequest request) {
-        Activity activity = findByIdOrThrow(id);
-        mapper.updateEntity(request, activity);
-        return mapper.toResponse(repository.save(activity));
+        Activity activity = activityRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Activity not found"));
+        activityMapper.updateEntity(request, activity);
+        return activityMapper.toResponse(activityRepository.save(activity));
     }
 
     @Override
-    @Transactional
-    public void deleteById(Long id) {
-        repository.deleteById(id);
-    }
-
-    private Activity findByIdOrThrow(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Activity", id));
+    public void delete(Long id) {
+        activityRepository.deleteById(id);
     }
 }

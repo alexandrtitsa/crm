@@ -13,30 +13,30 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LeadController {
 
-    private final LeadService leadService;
+    private final LeadService service;
 
     @GetMapping
     public List<LeadResponse> findAll() {
-        return leadService.findAll();
+        return service.findAll();
     }
 
     @GetMapping("/{id}")
     public LeadResponse findById(@PathVariable Long id) {
-        return leadService.findById(id);
+        return service.findById(id);
     }
 
     @PostMapping
     public LeadResponse create(@RequestBody LeadRequest request) {
-        return leadService.create(request);
+        return service.create(request);
     }
 
     @PutMapping("/{id}")
     public LeadResponse update(@PathVariable Long id, @RequestBody LeadRequest request) {
-        return leadService.update(id, request);
+        return service.update(id, request);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        leadService.deleteById(id);
+        service.delete(id);
     }
 }

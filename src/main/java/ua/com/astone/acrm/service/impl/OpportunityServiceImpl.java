@@ -1,66 +1,70 @@
 package ua.com.astone.acrm.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.com.astone.acrm.dto.opportunity.OpportunityRequest;
-import ua.com.astone.acrm.dto.opportunity.OpportunityResponse;
-import ua.com.astone.acrm.exception.NotFoundException;
+import ua.com.astone.acrm.dto.opportunity.*;
 import ua.com.astone.acrm.model.Opportunity;
 import ua.com.astone.acrm.repository.OpportunityRepository;
 import ua.com.astone.acrm.service.OpportunityService;
 import ua.com.astone.acrm.util.OpportunityMapper;
 
-import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class OpportunityServiceImpl implements OpportunityService {
 
-    private final OpportunityRepository repository;
-    private final OpportunityMapper mapper;
-
-    @Override
-    public List<OpportunityResponse> findAll() {
-        return repository.findAll().stream().map(mapper::toResponse).toList();
-    }
-
-    @Override
-    public Page<OpportunityResponse> findAll(Pageable pageable) {
-        return repository.findAll(pageable)
-                .map(mapper::toResponse);
-    }
+    private final OpportunityRepository opportunityRepository;
+    private final OpportunityMapper opportunityMapper;
 
     @Override
     public OpportunityResponse findById(Long id) {
-        return mapper.toResponse(findByIdOrThrow(id));
+        return opportunityRepository.findById(id)
+                .map(opportunityMapper::toResponse)
+                .orElseThrow(() -> new IllegalArgumentException("Opportunity not found"));
     }
 
     @Override
-    @Transactional
+    public List<OpportunityResponse> findAll() {
+        return opportunityRepository.findAll().stream()
+                .map(opportunityMapper::toResponse)
+                .toList();
+    }
+
+    @Override
+    public Page<OpportunityResponse> findAllPaged(OpportunityPageRequest request) {
+        Pageable pageable = PageRequest.of(request.getPage(), request.getSize(), request.toSort());
+
+        Page<Opportunity> page;
+        if (request.getSearch() != null && !request.getSearch().isBlank()) {
+            String q = request.getSearch().toLowerCase();
+            page = opportunityRepository.findByNameIgnoreCaseContainingOrStageIgnoreCaseContaining(q, q, pageable);
+        } else {
+            page = opportunityRepository.findAll(pageable);
+        }
+
+        return page.map(opportunityMapper::toResponse);
+    }
+
+    @Override
     public OpportunityResponse create(OpportunityRequest request) {
-        return mapper.toResponse(repository.save(mapper.toEntity(request)));
+        Opportunity opportunity = opportunityMapper.toEntity(request);
+        return opportunityMapper.toResponse(opportunityRepository.save(opportunity));
     }
 
     @Override
-    @Transactional
     public OpportunityResponse update(Long id, OpportunityRequest request) {
-        Opportunity opportunity = findByIdOrThrow(id);
-        mapper.updateEntity(request, opportunity);
-        return mapper.toResponse(repository.save(opportunity));
+        Opportunity opportunity = opportunityRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Opportunity not found"));
+        opportunityMapper.updateEntity(request, opportunity);
+        return opportunityMapper.toResponse(opportunityRepository.save(opportunity));
     }
 
     @Override
-    @Transactional
-    public void deleteById(Long id) {
-        repository.deleteById(id);
-    }
-
-    private Opportunity findByIdOrThrow(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Opportunity", id));
+    public void delete(Long id) {
+        opportunityRepository.deleteById(id);
     }
 }

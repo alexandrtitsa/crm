@@ -15,17 +15,23 @@ public class ContactMapper {
     private final CompanyRepository companyRepository;
 
     public Contact toEntity(ContactRequest request) {
-        Company company = companyRepository.findById(request.getCompanyId())
-                .orElseThrow(() -> new IllegalArgumentException("Company not found with ID: " + request.getCompanyId()));
-
         return Contact.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .phone(request.getPhone())
                 .position(request.getPosition())
-                .company(company)
+                .company(resolveCompany(request.getCompanyId()))
                 .build();
+    }
+
+    public void updateEntity(ContactRequest request, Contact contact) {
+        contact.setFirstName(request.getFirstName());
+        contact.setLastName(request.getLastName());
+        contact.setEmail(request.getEmail());
+        contact.setPhone(request.getPhone());
+        contact.setPosition(request.getPosition());
+        contact.setCompany(resolveCompany(request.getCompanyId()));
     }
 
     public ContactResponse toResponse(Contact contact) {
@@ -37,19 +43,10 @@ public class ContactMapper {
                 .phone(contact.getPhone())
                 .position(contact.getPosition())
                 .companyId(contact.getCompany() != null ? contact.getCompany().getId() : null)
-                .companyName(contact.getCompany() != null ? contact.getCompany().getName() : null) // ✅ Додай
                 .build();
     }
 
-    public void updateEntity(ContactRequest request, Contact contact) {
-        contact.setFirstName(request.getFirstName());
-        contact.setLastName(request.getLastName());
-        contact.setEmail(request.getEmail());
-        contact.setPhone(request.getPhone());
-        contact.setPosition(request.getPosition());
-
-        Company company = companyRepository.findById(request.getCompanyId())
-                .orElseThrow(() -> new IllegalArgumentException("Company not found: " + request.getCompanyId()));
-        contact.setCompany(company);
+    private Company resolveCompany(Long id) {
+        return id != null ? companyRepository.findById(id).orElse(null) : null;
     }
 }
