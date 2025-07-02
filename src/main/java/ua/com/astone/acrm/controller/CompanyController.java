@@ -20,22 +20,14 @@ public class CompanyController {
     public List<CompanyResponse> findAll() { return service.findAll(); }
 
     @GetMapping("/{id}")
-    public CompanyResponse findById(@PathVariable Long id) {
-        return service.findById(id);
-    }
+    public CompanyResponse findById(@PathVariable Long id) {return service.findById(id);}
 
     @PostMapping
-    public CompanyResponse create(@Valid @RequestBody CompanyRequest request) {
-        return service.create(request);
-    }
+    public CompanyResponse create(@Valid @RequestBody CompanyRequest request) {return service.create(request);}
 
     @PutMapping("/{id}")
-    public CompanyResponse update(@PathVariable Long id, @Valid @RequestBody CompanyRequest request) {
-        return service.update(id, request);
-    }
+    public CompanyResponse update(@PathVariable Long id, @Valid @RequestBody CompanyRequest request) {return service.update(id, request);}
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        service.delete(id);
-    }
+    public void delete(@PathVariable Long id) {service.delete(id);}
 }

@@ -20,22 +20,14 @@ public class ActivityController {
     public List<ActivityResponse> findAll() {return service.findAll();}
 
     @GetMapping("/{id}")
-    public ActivityResponse findById(@PathVariable Long id) {
-        return service.findById(id);
-    }
+    public ActivityResponse findById(@PathVariable Long id) {return service.findById(id);}
 
     @PostMapping
-    public ActivityResponse create(@Valid @RequestBody ActivityRequest request) {
-        return service.create(request);
-    }
+    public ActivityResponse create(@Valid @RequestBody ActivityRequest request) {return service.create(request);}
 
     @PutMapping("/{id}")
-    public ActivityResponse update(@PathVariable Long id, @Valid @RequestBody ActivityRequest request) {
-        return service.update(id, request);
-    }
+    public ActivityResponse update(@PathVariable Long id, @Valid @RequestBody ActivityRequest request) {return service.update(id, request);}
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        service.delete(id);
-    }
+    public void delete(@PathVariable Long id) {service.delete(id);}
 }

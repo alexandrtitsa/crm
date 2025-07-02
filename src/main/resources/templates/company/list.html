@@ -25,10 +25,6 @@
             <td th:text="${company.industry}"></td>
             <td th:text="${company.address}"></td>
             <td>
-                <a th:href="'http://' + ${company.website}" th:text="${company.website}" target="_blank"></a>
-            </td>
-            <td th:text="${company.description}"></td>
-            <td>
                 <a th:href="@{'/companies/' + ${company.id} + '/edit'}" class="btn btn-sm btn-warning">Редагувати</a>
                 <form th:action="@{'/companies/' + ${company.id} + '/delete'}" method="post" style="display:inline;">
                     <button class="btn btn-sm btn-danger">Видалити</button>

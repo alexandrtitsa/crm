@@ -2,41 +2,39 @@
 <html lang="uk" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Форма компанії</title>
+    <title th:text="${editId != null} ? 'Редагувати компанію' : 'Нова компанія'">Форма компанії</title>
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
 </head>
 <body th:replace="~{layout :: layout(~{::title}, ~{::section})}">
 <section>
-    <h1 th:text="${editId != null} ? 'Редагувати компанію' : 'Нова компанія'"></h1>
-    <form th:action="${editId != null} ? @{/companies/{id}/edit(id=${editId})} : @{/companies}"
-          th:object="${companyForm}" method="post">
-        <div>
-            <label for="name">Назва:</label>
-            <input type="text" id="name" th:field="*{name}" required/>
-        </div>
-
-        <div>
-            <label for="industry">Галузь:</label>
-            <input type="text" id="industry" th:field="*{industry}"/>
-        </div>
-        <div>
-            <label for="website">Веб-сайт:</label>
-            <input type="url" id="website" th:field="*{website}"/>
-        </div>
-        <div>
-            <label for="address">Адреса:</label>
-            <input type="text" id="address" th:field="*{address}"/>
-        </div>
-        <div>
-            <label for="description">Опис:</label>
-            <textarea id="description" th:field="*{description}"></textarea>
-        </div>
-        <div>
-            <button type="submit">Зберегти</button>
-            <a th:href="@{/companies}">Скасувати</a>
-        </div>
-    </form>
+    <div class="container mt-4">
+        <h1 th:text="${editId != null} ? 'Редагувати компанію' : 'Нова компанія'"></h1>
+        <form th:action="${editId != null} ? @{'/companies/' + ${editId} + '/edit'} : @{/companies}"
+              th:object="${companyForm}" method="post">
+            <div class="mb-3">
+                <label for="name" class="form-label">Назва:</label>
+                <input type="text" class="form-control" id="name" th:field="*{name}" required/>
+            </div>
+            <div class="mb-3">
+                <label for="industry" class="form-label">Галузь:</label>
+                <input type="text" class="form-control" id="industry" th:field="*{industry}"/>
+            </div>
+            <div class="mb-3">
+                <label for="website" class="form-label">Веб-сайт:</label>
+                <input type="url" class="form-control" id="website" th:field="*{website}"/>
+            </div>
+            <div class="mb-3">
+                <label for="address" class="form-label">Адреса:</label>
+                <input type="text" class="form-control" id="address" th:field="*{address}"/>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Опис:</label>
+                <textarea class="form-control" id="description" th:field="*{description}"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Зберегти</button>
+            <a th:href="@{/companies}" class="btn btn-secondary">Скасувати</a>
+        </form>
+    </div>
 </section>
-
 </body>
 </html>

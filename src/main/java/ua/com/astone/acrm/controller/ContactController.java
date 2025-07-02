@@ -1,7 +1,7 @@
 package ua.com.astone.acrm.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import ua.com.astone.acrm.dto.contact.ContactRequest;
 import ua.com.astone.acrm.dto.contact.ContactResponse;
@@ -17,27 +17,17 @@ public class ContactController {
     private final ContactService contactService;
 
     @GetMapping
-    public List<ContactResponse> findAll() {
-        return contactService.findAll();
-    }
+    public List<ContactResponse> findAll() {return contactService.findAll();}
 
     @GetMapping("/{id}")
-    public ContactResponse findById(@PathVariable Long id) {
-        return contactService.findById(id);
-    }
+    public ContactResponse findById(@PathVariable Long id) {return contactService.findById(id);}
 
     @PostMapping
-    public ContactResponse create(@RequestBody ContactRequest request) {
-        return contactService.create(request);
-    }
+    public ContactResponse create(@Valid @RequestBody ContactRequest request) {return contactService.create(request);}
 
     @PutMapping("/{id}")
-    public ContactResponse update(@PathVariable Long id, @RequestBody ContactRequest request) {
-        return contactService.update(id, request);
-    }
+    public ContactResponse update(@PathVariable Long id, @Valid @RequestBody ContactRequest request) {return contactService.update(id, request);}
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        contactService.delete(id);
-    }
+    public void delete(@PathVariable Long id) {contactService.delete(id);}
 }

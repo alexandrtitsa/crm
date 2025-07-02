@@ -17,9 +17,7 @@ public class OpportunityController {
     private final OpportunityService service;
 
     @GetMapping
-    public List<OpportunityResponse> findAll() {
-        return service.findAll();
-    }
+    public List<OpportunityResponse> findAll() {return service.findAll();}
 
     @GetMapping("/{id}")
     public OpportunityResponse findById(@PathVariable Long id) { return service.findById(id); }
@@ -28,11 +26,8 @@ public class OpportunityController {
     public OpportunityResponse create(@RequestBody @Valid OpportunityRequest request) {return service.create(request);}
 
     @PutMapping("/{id}")
-    public OpportunityResponse update(@PathVariable Long id, @RequestBody @Valid OpportunityRequest request) {
-        return service.update(id, request);
-    }
+    public OpportunityResponse update(@PathVariable Long id, @RequestBody @Valid OpportunityRequest request) {return service.update(id, request);}
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) { service.delete(id);
-    }
+    public void delete(@PathVariable Long id) { service.delete(id);}
 }
