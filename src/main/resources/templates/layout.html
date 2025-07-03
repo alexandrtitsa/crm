@@ -160,6 +160,12 @@
                     <span class="card-menu-label">Активності</span>
                 </div>
             </a>
+            <a class="card-menu-link" th:href="@{/analytics}">
+                <div class="card-menu p-2">
+                    <i class="bi bi-pie-chart-fill"></i>
+                    <span class="card-menu-label">Аналітика</span>
+                </div>
+            </a>
         </div>
         <form th:action="@{/logout}" method="post" style="display:inline;">
             <button type="submit" class="btn btn-danger">Вийти</button>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Аналітика</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Аналітика</h1>
+        <a th:href="@{/}" class="btn btn-outline-primary">
+            <i class="bi bi-house-door"></i> На головну
+        </a>
+    </div>
+
+    <div id="leadsStatusChart" style="width: 600px; height: 400px"></div>
+    <div id="opportunityProbabilityChart" style="width: 600px; height: 400px"></div>
+    <div id="expectedValueChart" style="width: 600px; height: 400px"></div>
+
+    <!-- Debug для перевірки даних -->
+    <div class="mt-4">
+        <h5>Дані для відладки:</h5>
+        <ul>
+            <li th:each="row : ${leadsByStatus}" th:text="'Статус: ' + ${row.status} + ', Кількість: ' + ${row.count}"></li>
+            <li th:each="row : ${opportunityByProb}" th:text="'Ймовірність: ' + ${row.probability} + ', Кількість: ' + ${row.count}"></li>
+            <li th:each="row : ${valueByStage}" th:text="'Стадія: ' + ${row.stage} + ', Сума: ' + ${row.sum}"></li>
+        </ul>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawCharts);
+
+    function drawCharts() {
+        // Leads by Status
+        var leadsStatusData = google.visualization.arrayToDataTable([
+            ['Статус', 'Кількість']
+            /*[# th:each="row : ${leadsByStatus}"]*/
+            , ['[[${row.status}]]', [[${row.count}]]]
+            /*[/]*/
+        ]);
+        var leadsStatusOptions = {title: 'Кількість лідів за статусом'};
+        var leadsStatusChart = new google.visualization.PieChart(document.getElementById('leadsStatusChart'));
+        leadsStatusChart.draw(leadsStatusData, leadsStatusOptions);
+
+        // Opportunity Probability
+        var opportunityProbData = google.visualization.arrayToDataTable([
+            ['Ймовірність (%)', 'Кількість']
+            /*[# th:each="row : ${opportunityByProb}"]*/
+            , ['[[${row.probability}]]', [[${row.count}]]]
+            /*[/]*/
+        ]);
+        var opportunityProbOptions = {title: 'Ймовірність закриття можливостей'};
+        var opportunityProbChart = new google.visualization.ColumnChart(document.getElementById('opportunityProbabilityChart'));
+        opportunityProbChart.draw(opportunityProbData, opportunityProbOptions);
+
+        // Expected Value by Stage
+        var expectedValueData = google.visualization.arrayToDataTable([
+            ['Стадія', 'Сума вигоди']
+            /*[# th:each="row : ${valueByStage}"]*/
+            , ['[[${row.stage}]]', [[${row.sum}]]]
+            /*[/]*/
+        ]);
+        var expectedValueOptions = {title: 'Сума очікуваної вигоди по стадіях'};
+        var expectedValueChart = new google.visualization.BarChart(document.getElementById('expectedValueChart'));
+        expectedValueChart.draw(expectedValueData, expectedValueOptions);
+    }
+</script>
+</body>
+</html>
