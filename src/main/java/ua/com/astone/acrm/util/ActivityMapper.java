@@ -42,7 +42,10 @@ public class ActivityMapper {
                 .dateTime(activity.getDateTime())
                 .description(activity.getDescription())
                 .contactId(activity.getContact() != null ? activity.getContact().getId() : null)
+                .contactFirstName(activity.getContact() != null ? activity.getContact().getFirstName() : null)
+                .contactLastName(activity.getContact() != null ? activity.getContact().getLastName() : null)
                 .opportunityId(activity.getOpportunity() != null ? activity.getOpportunity().getId() : null)
+                .opportunityName(activity.getOpportunity() != null ? activity.getOpportunity().getName() : null)
                 .build();
     }
 

@@ -13,7 +13,8 @@
         <tr>
             <th>Джерело</th>
             <th>Статус</th>
-            <th>Контакт</th>
+            <th>Ім’я</th>
+            <th>Прізвище</th>
             <th>Компанія</th>
             <th>Дії</th>
         </tr>
@@ -22,8 +23,9 @@
         <tr th:each="lead : ${leads}">
             <td th:text="${lead.source}"></td>
             <td th:text="${lead.status}"></td>
-            <td th:text="${lead.contactId}"></td>
-            <td th:text="${lead.companyId}"></td>
+            <td th:text="${lead.contactFirstName}"></td>
+            <td th:text="${lead.contactLastName}"></td>
+            <td th:text="${lead.companyName}"></td>
             <td>
                 <a th:href="@{'/leads/' + ${lead.id} + '/edit'}" class="btn btn-sm btn-warning">Редагувати</a>
                 <form th:action="@{'/leads/' + ${lead.id} + '/delete'}" method="post" style="display:inline;">

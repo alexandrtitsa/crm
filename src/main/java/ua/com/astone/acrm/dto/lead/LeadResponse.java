@@ -14,7 +14,8 @@ public class LeadResponse {
     private String status;
 
     private Long contactId;
-    private String contactName;
+    private String contactFirstName;
+    private String contactLastName;
 
     private Long companyId;
     private String companyName;

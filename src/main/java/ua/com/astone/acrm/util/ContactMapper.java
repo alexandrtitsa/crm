@@ -43,6 +43,7 @@ public class ContactMapper {
                 .phone(contact.getPhone())
                 .position(contact.getPosition())
                 .companyId(contact.getCompany() != null ? contact.getCompany().getId() : null)
+                .companyName(contact.getCompany() != null ? contact.getCompany().getName() : null)
                 .build();
     }
 

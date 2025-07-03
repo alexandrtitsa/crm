@@ -40,6 +40,7 @@ public class OpportunityMapper {
                 .expectedValue(opportunity.getExpectedValue())
                 .stage(opportunity.getStage())
                 .leadId(opportunity.getLead() != null ? opportunity.getLead().getId() : null)
+                .leadStatus(opportunity.getLead() != null ? opportunity.getLead().getStatus() : null)
                 .build();
     }
 

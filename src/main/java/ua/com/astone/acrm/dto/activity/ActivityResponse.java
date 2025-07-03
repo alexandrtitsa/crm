@@ -16,5 +16,8 @@ public class ActivityResponse {
     private LocalDateTime dateTime;
     private String description;
     private Long contactId;
+    private String contactFirstName;
+    private String contactLastName;
     private Long opportunityId;
+    private String opportunityName;
 }

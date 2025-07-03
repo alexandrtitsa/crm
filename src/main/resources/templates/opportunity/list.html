@@ -25,7 +25,7 @@
             <td th:text="${op.probability}"></td>
             <td th:text="${op.expectedValue}"></td>
             <td th:text="${op.stage}"></td>
-            <td th:text="${op.leadId}"></td>
+            <td th:text="${op.leadStatus}"></td>
             <td>
                 <a th:href="@{'/opportunities/' + ${op.id} + '/edit'}" class="btn btn-sm btn-warning">Редагувати</a>
                 <form th:action="@{'/opportunities/' + ${op.id} + '/delete'}" method="post" style="display:inline;">

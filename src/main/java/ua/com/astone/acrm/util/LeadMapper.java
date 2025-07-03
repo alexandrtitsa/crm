@@ -39,7 +39,10 @@ public class LeadMapper {
                 .source(lead.getSource())
                 .status(lead.getStatus())
                 .contactId(lead.getContact() != null ? lead.getContact().getId() : null)
+                .contactFirstName(lead.getContact() != null ? lead.getContact().getFirstName() : null)
+                .contactLastName(lead.getContact() != null ? lead.getContact().getLastName() : null)
                 .companyId(lead.getCompany() != null ? lead.getCompany().getId() : null)
+                .companyName(lead.getCompany() != null ? lead.getCompany().getName() : null)
                 .build();
     }
 

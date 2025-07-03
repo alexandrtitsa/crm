@@ -17,4 +17,5 @@ public class OpportunityResponse {
     private BigDecimal expectedValue;
     private String stage;
     private Long leadId;
+    private String leadStatus;
 }

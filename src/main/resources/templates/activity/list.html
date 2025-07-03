@@ -14,7 +14,8 @@
             <th>Тип</th>
             <th>Час</th>
             <th>Опис</th>
-            <th>Контакт</th>
+            <th>Контактна</th>
+            <th>особа</th>
             <th>Можливість</th>
             <th>Дії</th>
         </tr>
@@ -24,8 +25,9 @@
             <td th:text="${a.type}"></td>
             <td th:text="${a.dateTime}"></td>
             <td th:text="${a.description}"></td>
-            <td th:text="${a.contactId}"></td>
-            <td th:text="${a.opportunityId}"></td>
+            <td th:text="${a.contactFirstName}"></td>
+            <td th:text="${a.contactLastName}"></td>
+            <td th:text="${a.opportunityName}"></td>
             <td>
                 <a th:href="@{'/activities/' + ${a.id} + '/edit'}" class="btn btn-sm btn-warning">Редагувати</a>
                 <form th:action="@{'/activities/' + ${a.id} + '/delete'}" method="post" style="display:inline;">
