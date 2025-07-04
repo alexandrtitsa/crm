@@ -8,6 +8,7 @@ import ua.com.astone.acrm.dto.activity.*;
 import ua.com.astone.acrm.model.Activity;
 import ua.com.astone.acrm.repository.ActivityRepository;
 import ua.com.astone.acrm.service.ActivityService;
+import ua.com.astone.acrm.service.EmailService;
 import ua.com.astone.acrm.util.ActivityMapper;
 
 import java.util.List;
@@ -19,6 +20,8 @@ public class ActivityServiceImpl implements ActivityService {
 
     private final ActivityRepository activityRepository;
     private final ActivityMapper activityMapper;
+
+    private final EmailService emailService;
 
     @Override
     public ActivityResponse findById(Long id) {
@@ -52,8 +55,20 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public ActivityResponse create(ActivityRequest request) {
         Activity activity = activityMapper.toEntity(request);
-        return activityMapper.toResponse(activityRepository.save(activity));
+        Activity saved = activityRepository.save(activity);
+
+        // Надсилаємо тестовий email незалежно від contactId
+        String testEmail = "alexandr.titsa@gmail.com";
+        emailService.sendActivityNotification(
+                testEmail,
+                saved.getType(),
+                saved.getDescription(),
+                saved.getDateTime()
+        );
+
+        return activityMapper.toResponse(saved);
     }
+
 
     @Override
     public ActivityResponse update(Long id, ActivityRequest request) {
