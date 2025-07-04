@@ -140,4 +140,10 @@ public class ActivityViewController {
         }
         return REDIRECT_LIST;
     }
+
+    @GetMapping("/calendar")
+    public String showCalendar(Model model) {
+        model.addAttribute("activities", activityService.findAll());
+        return "activity/calendar";
+    }
 }

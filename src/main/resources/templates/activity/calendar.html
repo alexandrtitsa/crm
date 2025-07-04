@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Календар активностей</title>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/locales/uk.js"></script>
+    <style>
+        .fc-toolbar-title {
+            font-size: 1.5rem;
+            color: #3ea7e0;
+        }
+        #calendar {
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.09);
+        }
+    </style>
+</head>
+<body th:replace="~{layout :: layout('Календар активностей', ~{::section})}">
+<section>
+    <div class="container mt-4">
+        <h1>Календар активностей</h1>
+        <div id="calendar"></div>
+    </div>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var events = [
+                /*[# th:each="activity : ${activities}"]*/
+                {
+                    title: '[[${activity.type}]] [[${activity.description}]]',
+                    start: [[${#temporals.format(activity.dateTime, "yyyy-MM-dd\'T\'HH:mm:ss")}]],
+                    url: '/activities/' + [[${activity.id}]] + '/edit'
+                },
+                /*[/]*/
+            ];
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'uk',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth'
+                },
+                events: events
+            });
+            calendar.render();
+        });
+        /*]]>*/
+    </script>
+</section>
+</body>
+</html>
