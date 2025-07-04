@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Імпорт компаній</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
+</head>
+<body th:replace="~{layout :: layout('Імпорт компаній', ~{::section})}">
+<section>
+    <div class="container mt-4">
+        <h2>Імпорт компаній (Excel/CSV)</h2>
+        <form th:action="@{/companies/import}" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="file" class="form-label">Оберіть файл (Excel .xlsx або CSV .csv):</label>
+                <input type="file" class="form-control" id="file" name="file" accept=".xlsx,.csv" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Завантажити</button>
+            <a class="btn btn-secondary" th:href="@{/companies}">Скасувати</a>
+        </form>
+    </div>
+</section>
+</body>
+</html>
