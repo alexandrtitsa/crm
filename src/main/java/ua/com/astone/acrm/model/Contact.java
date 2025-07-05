@@ -23,6 +23,6 @@ public class Contact {
     private String position;
 
     @ManyToOne
-    @JoinColumn(name = "company_id", nullable = false)
+    @JoinColumn(name = "company_id")
     private Company company;
 }

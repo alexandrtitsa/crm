@@ -17,5 +17,4 @@ public interface OpportunityRepository extends JpaRepository<Opportunity, Long> 
 
     @Query("SELECT new ua.com.astone.acrm.dto.analytics.StageValueDto(o.stage, SUM(o.expectedValue)) FROM Opportunity o GROUP BY o.stage")
     List<StageValueDto> sumExpectedValueByStage();
-
 }

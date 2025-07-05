@@ -41,7 +41,6 @@ public class LeadServiceImpl implements LeadService {
         Page<Lead> page;
         if (request.getSearch() != null && !request.getSearch().isBlank()) {
             String q = request.getSearch().toLowerCase();
-            // Приклад пошуку за source або status (додай інше якщо потрібно)
             page = leadRepository.findBySourceIgnoreCaseContainingOrStatusIgnoreCaseContaining(q, q, pageable);
         } else {
             page = leadRepository.findAll(pageable);
