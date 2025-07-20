@@ -1,6 +1,7 @@
 package ua.com.astone.acrm.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,9 @@ public class ActivityServiceImpl implements ActivityService {
     private final ActivityMapper activityMapper;
 
     private final EmailService emailService;
+
+    @Value("${test.email}")
+    private String emailReceive;
 
     @Override
     public ActivityResponse findById(Long id) {
@@ -58,7 +62,7 @@ public class ActivityServiceImpl implements ActivityService {
         Activity saved = activityRepository.save(activity);
 
         // Надсилаємо тестовий email незалежно від contactId
-        String testEmail = "alexandr.titsa@gmail.com";
+        String testEmail = emailReceive;
         emailService.sendActivityNotification(
                 testEmail,
                 saved.getType(),

@@ -2,9 +2,11 @@ package ua.com.astone.acrm.controller.view;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.beans.factory.annotation.Autowired;
 import ua.com.astone.acrm.dto.analytics.ProbabilityCountDto;
@@ -26,8 +28,14 @@ class AnalyticsViewControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @Autowired
     private AnalyticsService analyticsService;
+
+    @TestConfiguration
+    static class MockConfig {
+        @Bean AnalyticsService analyticsService() {
+            return Mockito.mock(AnalyticsService.class);}
+    }
 
     @Test
     @DisplayName("GET /analytics — сторінка аналітики відображається коректно")

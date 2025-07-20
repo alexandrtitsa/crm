@@ -4,7 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -33,10 +34,17 @@ class OpportunityViewControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @Autowired
     private OpportunityService opportunityService;
-    @MockBean
+    @Autowired
     private LeadService leadService;
+
+    @TestConfiguration
+    static class MockConfig {
+        @Bean OpportunityService opportunityService() { return Mockito.mock(OpportunityService.class); }
+        @Bean
+        LeadService leadService() { return Mockito.mock(LeadService.class); }
+    }
 
     @Test
     @WithMockUser
@@ -103,7 +111,7 @@ class OpportunityViewControllerTest {
                 .leadId(1L)
                 .build();
 
-        Mockito.when(opportunityService.findById(eq(2L))).thenReturn(response);
+        Mockito.when(opportunityService.findById(2L)).thenReturn(response);
         Mockito.when(leadService.findAll()).thenReturn(List.of(
                 LeadResponse.builder().id(1L).source("web").build()
         ));

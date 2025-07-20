@@ -49,18 +49,15 @@ class AnalyticsServiceImplIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        // Чистимо дані
         opportunityRepository.deleteAll();
         leadRepository.deleteAll();
 
-        // Додаємо тестові ліди
         leadRepository.saveAll(List.of(
                 new Lead(null, "web", "new", null, null),
                 new Lead(null, "web", "contacted", null, null),
                 new Lead(null, "email", "new", null, null)
         ));
 
-        // Додаємо тестові можливості
         opportunityRepository.saveAll(List.of(
                 new Opportunity(null, "Deal1", 70, BigDecimal.valueOf(1000), "Initial", null),
                 new Opportunity(null, "Deal2", 50, BigDecimal.valueOf(500), "Negotiation", null),
@@ -72,7 +69,6 @@ class AnalyticsServiceImplIntegrationTest {
     void countLeadsByStatus_returnsCorrectCounts() {
         List<StatusCountDto> result = analyticsService.countLeadsByStatus();
 
-        // Перевіряємо, що повертає правильні статуси і кількість
         assertThat(result).anySatisfy(dto -> {
             if (dto.status().equals("new")) assertThat(dto.count()).isEqualTo(2L);
             if (dto.status().equals("contacted")) assertThat(dto.count()).isEqualTo(1L);
@@ -83,7 +79,6 @@ class AnalyticsServiceImplIntegrationTest {
     void countOpportunitiesByProbability_returnsCorrectCounts() {
         List<ProbabilityCountDto> result = analyticsService.countOpportunitiesByProbability();
 
-        // Перевіряємо, що повертає правильну кількість для probability
         assertThat(result).anySatisfy(dto -> {
             if (dto.getProbability() == 70) assertThat(dto.getCount()).isEqualTo(2L);
             if (dto.getProbability() == 50) assertThat(dto.getCount()).isEqualTo(1L);

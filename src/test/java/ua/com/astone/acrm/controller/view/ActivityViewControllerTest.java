@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -22,26 +24,33 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ActivityViewController.class)
 @AutoConfigureMockMvc(addFilters = false)
+@Import(ActivityViewControllerTest.MockConfig.class) // <<< тут твоя тестова конфігурація
 class ActivityViewControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @Autowired
     private ActivityService activityService;
 
-    @MockBean
+    @Autowired
     private ContactService contactService;
 
-    @MockBean
+    @Autowired
     private OpportunityService opportunityService;
+
+    @TestConfiguration
+    static class MockConfig {
+        @Bean ActivityService activityService() { return Mockito.mock(ActivityService.class); }
+        @Bean ContactService contactService() { return Mockito.mock(ContactService.class); }
+        @Bean OpportunityService opportunityService() { return Mockito.mock(OpportunityService.class); }
+    }
 
     @Test
     @DisplayName("GET /activities — повертає сторінку зі списком")
@@ -101,7 +110,7 @@ class ActivityViewControllerTest {
                 .dateTime(LocalDateTime.now())
                 .build();
 
-        Mockito.when(activityService.findById(eq(2L))).thenReturn(response);
+        Mockito.when(activityService.findById(2L)).thenReturn(response);
         Mockito.when(contactService.findAll()).thenReturn(List.of());
         Mockito.when(opportunityService.findAll()).thenReturn(List.of());
 
@@ -117,7 +126,7 @@ class ActivityViewControllerTest {
     @Test
     @DisplayName("GET /activities/{id}/edit — форма редагування: не знайдено")
     void shouldRedirectWhenEditFormNotFound() throws Exception {
-        Mockito.when(activityService.findById(eq(404L)))
+        Mockito.when(activityService.findById(404L))
                 .thenThrow(new IllegalArgumentException("Not found"));
 
         mockMvc.perform(get("/activities/404/edit"))

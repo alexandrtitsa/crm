@@ -4,7 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -34,12 +35,20 @@ class LeadViewControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @Autowired
     private LeadService leadService;
-    @MockBean
+    @Autowired
     private CompanyService companyService;
-    @MockBean
+    @Autowired
     private ContactService contactService;
+
+    @TestConfiguration
+    static class MockConfig {
+        @Bean LeadService leadService() { return Mockito.mock(LeadService.class); }
+        @Bean CompanyService companyService() { return Mockito.mock(CompanyService.class); }
+        @Bean ContactService contactService() { return Mockito.mock(ContactService.class); }
+
+    }
 
     @Test
     @WithMockUser
@@ -105,7 +114,7 @@ class LeadViewControllerTest {
                 .companyId(2L)
                 .build();
 
-        Mockito.when(leadService.findById(eq(2L))).thenReturn(response);
+        Mockito.when(leadService.findById(2L)).thenReturn(response);
         Mockito.when(companyService.findAll()).thenReturn(List.of(CompanyResponse.builder().id(2L).name("TestCompany").build()));
         Mockito.when(contactService.findAll()).thenReturn(List.of(ContactResponse.builder().id(1L).firstName("Іван").build()));
 

@@ -4,8 +4,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.beans.factory.annotation.Autowired;
 import ua.com.astone.acrm.service.CompanyImportService;
@@ -23,8 +24,14 @@ class CompanyImportControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @Autowired
     private CompanyImportService importService;
+
+    @TestConfiguration
+    static class MockConfig {
+        @Bean CompanyImportService importService() {
+            return Mockito.mock(CompanyImportService.class);}
+    }
 
     @Test
     @DisplayName("GET /companies/import — повертає форму імпорту")
@@ -54,4 +61,5 @@ class CompanyImportControllerTest {
                 .andExpect(redirectedUrl("/companies"))
                 .andExpect(flash().attributeExists("successMessage"));
     }
+
 }

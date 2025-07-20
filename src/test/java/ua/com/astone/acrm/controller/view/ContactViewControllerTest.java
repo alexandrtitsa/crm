@@ -4,7 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -32,11 +33,17 @@ class ContactViewControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @Autowired
     private ContactService contactService;
 
-    @MockBean
+    @Autowired
     private CompanyService companyService;
+
+    @TestConfiguration
+    static class MockConfig {
+        @Bean ContactService contactService() { return Mockito.mock(ContactService.class); }
+        @Bean CompanyService companyService() { return Mockito.mock(CompanyService.class); }
+    }
 
     @Test
     @WithMockUser
@@ -104,7 +111,7 @@ class ContactViewControllerTest {
                 .companyId(5L)
                 .build();
 
-        Mockito.when(contactService.findById(eq(2L))).thenReturn(response);
+        Mockito.when(contactService.findById(2L)).thenReturn(response);
         Mockito.when(companyService.findAll()).thenReturn(List.of(CompanyResponse.builder().id(5L).name("TestCompany").build()));
 
         mockMvc.perform(get("/contacts/2/edit"))

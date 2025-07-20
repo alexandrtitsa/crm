@@ -25,9 +25,11 @@ class CompanyImportServiceImplIntegrationTest {
 
     @Test
     void importCompanies_fromCsv_shouldCreateCompanies() throws Exception {
-        String csv = "name;industry;address;website;description\n" +
-                "Google;IT;USA;www.google.com;Search engine\n" +
-                "Apple;IT;USA;www.apple.com;Tech giant\n";
+        String csv = """
+                name;industry;address;website;description
+                Google;IT;USA;www.google.com;Search engine
+                Apple;IT;USA;www.apple.com;Tech giant
+                """;
         MockMultipartFile file = new MockMultipartFile(
                 "file", "companies.csv", "text/csv", csv.getBytes()
         );
@@ -45,7 +47,6 @@ class CompanyImportServiceImplIntegrationTest {
 
     @Test
     void importCompanies_fromExcel_shouldCreateCompanies() throws Exception {
-        // Excel with 2 companies, headers: name, industry, address, website, description
         XSSFWorkbook workbook = new XSSFWorkbook();
         var sheet = workbook.createSheet();
         var header = sheet.createRow(0);
