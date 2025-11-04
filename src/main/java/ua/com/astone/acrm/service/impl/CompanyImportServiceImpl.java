@@ -65,7 +65,7 @@ public class CompanyImportServiceImpl implements CompanyImportService {
                         count++;
                     }
                 } catch (Exception ex) {
-                    // Тут можна залогувати помилку з номером рядка
+
                 }
             }
         }

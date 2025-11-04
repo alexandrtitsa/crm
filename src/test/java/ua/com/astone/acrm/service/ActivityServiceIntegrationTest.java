@@ -59,7 +59,6 @@ class ActivityServiceIntegrationTest {
         assertThat(created.getType()).isEqualTo("Call");
         assertThat(created.getDescription()).isEqualTo("Follow up");
 
-        // Перевіряємо, що EmailService був викликаний
         verify(emailService, times(1))
                 .sendActivityNotification(anyString(), eq("Call"), eq("Follow up"), any());
     }

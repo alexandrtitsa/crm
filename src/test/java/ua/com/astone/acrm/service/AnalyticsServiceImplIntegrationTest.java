@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
-@ActiveProfiles("test") // якщо маєш окремий application-test.properties
+@ActiveProfiles("test")
 @Transactional
 class AnalyticsServiceImplIntegrationTest {
 

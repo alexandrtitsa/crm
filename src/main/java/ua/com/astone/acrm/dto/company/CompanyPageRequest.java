@@ -20,13 +20,12 @@ public class CompanyPageRequest {
     private Sort.Direction direction = Sort.Direction.ASC;
 
     public Sort toSort() {
-        // Безпечна дефолтна поведінка
+
         Sort.Direction safeDirection = (direction == null) ? Sort.Direction.ASC : direction;
         String safeSort = (sort == null || sort.isBlank()) ? "name" : sort;
         return Sort.by(safeDirection, safeSort);
     }
 
-    // Можна додати просту перевірку через setter, якщо треба:
     public void setPage(int page) {
         this.page = Math.max(0, page);
     }
