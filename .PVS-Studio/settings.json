@@ -4,6 +4,7 @@
   "threads": 12,
   "output-type": "json",
   "securityRelatedIssues": false,
+  "annotation-file": [],
   "incremental": false,
   "force-rebuild": false,
   "disable-cache": false,
@@ -40,5 +41,6 @@
   "check-license": false,
   "logging": "OFF",
   "project": "/Users/user/git/repository3/ACrm",
-  "type": "sources"
+  "type": "sources",
+  "disableDiag": false
 }
